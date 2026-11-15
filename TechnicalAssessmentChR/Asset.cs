@@ -4,31 +4,29 @@ using System.Text;
 
 namespace TechnicalAssessmentChR
 {
-    public struct Asset
+    public class Asset
     {
 
         #region Properties
 
         public string AssetSecurity { get; }
-        public float Target { get; }
-        public float Current { get; }
-        public float Deviation { get; }
-        public float UnitPrice { get; }
+        public float UnitPrice { get; private set; }
 
         #endregion
 
         #region Constructors
 
-        public Asset(string assetSecurity, float target, float current, float deviation, float unitPrice)
+        public Asset(string assetSecurity, float unitPrice)
         {
-            AssetSecurity = assetSecurity;
-            Target = target;
-            Current = current;
-            Deviation = deviation;
-            UnitPrice = unitPrice;
+            this.AssetSecurity = assetSecurity;
+            this.UnitPrice = unitPrice;
         }
 
         #endregion
 
+        public void UpdateUnitPrice(float newUnitPrice)
+        {
+            this.UnitPrice = newUnitPrice;
+        }
     }
 }

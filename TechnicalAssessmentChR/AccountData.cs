@@ -10,19 +10,26 @@ namespace TechnicalAssessmentChR
         #region Properties
 
         public string AccountName { get; }
-        public List<Asset> Assets { get; set; }
+
+        public float TotalAssetsValue { get; private set; }
+        public Dictionary<Asset, DataForAsset> Assets { get; private set; }
 
         #endregion
 
         #region Constructors
 
-        public AccountData(string accountName, List<Asset> assets)
+        public AccountData(string accountName, float totalAssetsValue, Dictionary<Asset, DataForAsset> assets)
         {
-            AccountName = accountName;
-            Assets = assets;
+            this.AccountName = accountName;
+            this.TotalAssetsValue = totalAssetsValue;
+            this.Assets = assets;
         }
 
         #endregion
 
+        public void SetTotalAssetsValue(float newTotalAssetsValue)
+        {
+            this.TotalAssetsValue = newTotalAssetsValue;
+        }
     }
 }

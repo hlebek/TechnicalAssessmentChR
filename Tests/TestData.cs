@@ -5,22 +5,43 @@ using TechnicalAssessmentChR;
 
 namespace Tests
 {
-    public static class TestData
+    public class TestData
     {
-        private static string accountName = "ABC";
-        private static List<Asset> assets = new List<Asset> {
-            new Asset("IBM", 20f, 10f, -10f, 150f),
-            new Asset("MSFT", 20f, 20f, 0f, 90f),
-            new Asset("ORCL", 20f, 30f, 10f, 220f),
-            new Asset("AAPL", 20f, 20f, 0f, 450f),
-            new Asset("HD", 20f, 20f, 0f, 70f),
+        private string accountName = "ABC";
+        private float totalAssetsValue = 100000f;
+        private Dictionary<Asset, DataForAsset> assetsToTest = new Dictionary<Asset, DataForAsset> {
+            { new Asset("IBM", 150f), new DataForAsset(20f, 10f) },
+            { new Asset("MSFT", 90f), new DataForAsset(20f, 20f) },
+            { new Asset("ORCL", 220f), new DataForAsset(20f, 30f) },
+            { new Asset("AAPL", 450f), new DataForAsset(20f, 20f) },
+            { new Asset("HD", 70f), new DataForAsset(20f, 20f) },
         };
 
-        private static AccountData accountData = new AccountData(accountName, assets);
+        public AccountData accountData;
 
-        public static AccountData GetAccountData()
+        public TestData()
         {
-            return accountData;
+            accountData = new AccountData(accountName, totalAssetsValue, assetsToTest);
+        }
+
+        public TestData(string accountName)
+        {
+            accountData = new AccountData(accountName, totalAssetsValue, assetsToTest);
+        }
+
+        public TestData(string accountName, float totalAssetsValue)
+        {
+            accountData = new AccountData(accountName, totalAssetsValue, assetsToTest);
+        }
+
+        public TestData(string accountName, Dictionary<Asset, DataForAsset> assets)
+        {
+            accountData = new AccountData(accountName, totalAssetsValue, assets);
+        }
+
+        public TestData(string accountName, float totalAssetsValue, Dictionary<Asset, DataForAsset> assets)
+        {
+            accountData = new AccountData(accountName, totalAssetsValue, assets);
         }
     }
 }
