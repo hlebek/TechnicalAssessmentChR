@@ -12,3 +12,40 @@ Things to test:
 9. Output should be negative for negative Target Variance and positive for positive Target Variance
 10. Output should be equal to Total Asset times Target Variance/100 divided by Unit Price
 11. Output and Variance have the same symbol
+
+===
+Manual test cases:
+
+A. Test Output value is correct:
+Test steps:
+1. Go to metrics page
+2. Calculate output using formula ((Target_Variance/100) * Total_Asset)/Unit_Price and round up to 3 decimal places
+3. Compare Output value from the app, rounded to 3 decimal places to calculated value from step 2.
+
+Expected result:
+Values should be equal
+
+B. Test Output value is not empty:
+Test steps:
+1. Go to metrics page
+2. Check value under Output is not empty
+
+Expected result:
+Output contains any value
+
+C. Test Output value has the same sign as Variance
+Test steps:
+1. Go to metrics page
+2. Compare Variance value's sign to Output value's sign
+
+Expected result:
+Signs should be the same
+
+D. Test Output is 0 for zero Variance
+Test steps:
+1. Go to metrics page
+2. Check if Variance is 0
+3. Check if Output is 0
+
+Expected result
+Both Variance and Output are equal to 0
