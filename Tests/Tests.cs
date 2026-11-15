@@ -6,6 +6,8 @@ using Xunit.Abstractions;
 
 namespace Tests
 {
+
+    // NOTE: Assuming the shares owned by an account may be fractional.
     public class Tests
     {
         static TestData testData = new TestData();
