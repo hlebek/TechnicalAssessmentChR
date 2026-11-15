@@ -14,7 +14,7 @@
 
         public float GetOutput(float totalAssetsValue, Asset asset)
         {
-            return (totalAssetsValue * (Math.Abs(Variance) / 100)) / asset.UnitPrice;
+            return (totalAssetsValue * (Variance / 100)) / asset.UnitPrice;
         }
     }
 }

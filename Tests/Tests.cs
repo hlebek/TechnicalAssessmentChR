@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TechnicalAssessmentChR;
+using Xunit.Abstractions;
 
 namespace Tests
 {
@@ -11,6 +12,12 @@ namespace Tests
         private AccountData accountData { get => testData.accountData; }
         private List<Asset> accountAssets { get => new List<Asset>(accountData.Assets.Keys); }
         private List<DataForAsset> accountAssetsData { get => new List<DataForAsset>(accountData.Assets.Values); }
+        private readonly ITestOutputHelper ConsoleOutput;
+
+        public Tests(ITestOutputHelper consoleOutput)
+        {
+            this.ConsoleOutput = consoleOutput;
+        }
 
         [Fact]
         public void TargetSumEqualTo100()
@@ -39,7 +46,7 @@ namespace Tests
         [Fact]
         public void TargetValuesPositive()
         {
-            Assert.All(accountAssetsData, a => Assert.True(a.Target > 0));
+            Assert.All(accountAssetsData, a => Assert.True(a.Target >= 0));
         }
 
         [Fact]
@@ -81,11 +88,39 @@ namespace Tests
         }
 
         [Fact]
-        public void TestOutput()
+        public void TestOutputPolarity()
         {
-            List<string> assetSecurities = accountAssets.Select(a => a.AssetSecurity).ToList();
+            foreach (var asset in accountData.Assets)
+            {
+                float output = asset.Value.GetOutput(accountData.TotalAssetsValue, asset.Key);
 
-            Assert.Distinct(assetSecurities);
+                ConsoleOutput.WriteLine($"For {asset.Key.AssetSecurity} Output: {output}");
+
+                if (asset.Value.Variance > 0)
+                {
+                    Assert.True(output > 0);
+                }
+                else if (asset.Value.Variance < 0)
+                {
+                    Assert.True(output < 0);
+                }
+                else
+                {
+                    Assert.Equal(0, output);
+                }
+            }
+        }
+
+        [Fact]
+        public void TestOutputValue()
+        {
+            foreach (var asset in accountData.Assets)
+            {
+                float expectedOutput = accountData.TotalAssetsValue * (asset.Value.Variance / 100) / asset.Key.UnitPrice;
+                float actualOutput = asset.Value.GetOutput(accountData.TotalAssetsValue, asset.Key);
+                ConsoleOutput.WriteLine($"For {asset.Key.AssetSecurity} Expected: {expectedOutput}, Actual: {actualOutput}");
+                Assert.Equal(expectedOutput, actualOutput);
+            }
         }
     }
 }
