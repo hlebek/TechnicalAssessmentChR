@@ -7,6 +7,9 @@ namespace Tests
 {
     public class TestData
     {
+
+        #region Variables
+
         private string accountName = "ABC";
         private float totalAssetsValue = 100000f;
         private Dictionary<Asset, DataForAsset> assetsToTest = new Dictionary<Asset, DataForAsset> {
@@ -18,6 +21,10 @@ namespace Tests
         };
 
         public AccountData accountData;
+
+        #endregion
+
+        #region Constructors
 
         public TestData()
         {
@@ -43,5 +50,8 @@ namespace Tests
         {
             accountData = new AccountData(accountName, totalAssetsValue, assets);
         }
+
+        #endregion
+
     }
 }

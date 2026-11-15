@@ -6,21 +6,37 @@ using Xunit.Abstractions;
 
 namespace Tests
 {
-
     // NOTE: Assuming the shares owned by an account may be fractional.
     public class Tests
     {
+
+        #region Variables
+
         static TestData testData = new TestData();
+        private readonly ITestOutputHelper ConsoleOutput;
+
+        #endregion
+
+        #region Properties
+
         private AccountData accountData { get => testData.accountData; }
         private List<Asset> accountAssets { get => new List<Asset>(accountData.Assets.Keys); }
         private List<DataForAsset> accountAssetsData { get => new List<DataForAsset>(accountData.Assets.Values); }
-        private readonly ITestOutputHelper ConsoleOutput;
+
+        #endregion
+
+        #region Constructors
 
         public Tests(ITestOutputHelper consoleOutput)
         {
             this.ConsoleOutput = consoleOutput;
         }
 
+        #endregion
+
+        #region Test Methods
+
+        // NOTE: The test does not test Output itself.
         [Fact]
         public void TargetSumEqualTo100()
         {
@@ -29,6 +45,7 @@ namespace Tests
             Assert.Equal(expectedTargetSum, accountAssetsData.Sum(a => a.Target));
         }
 
+        // NOTE: The test does not test Output itself.
         [Fact]
         public void CurrentSumEqualTo100()
         {
@@ -37,6 +54,7 @@ namespace Tests
             Assert.Equal(expectedCurrentSum, accountAssetsData.Sum(a => a.Current));
         }
 
+        // NOTE: The test does not test Output itself.
         [Fact]
         public void VarianceSumEqualToZero()
         {
@@ -45,42 +63,49 @@ namespace Tests
             Assert.Equal(expectedVarianceSum, accountAssetsData.Sum(a => a.Variance));
         }
 
+        // NOTE: The test does not test Output itself.
         [Fact]
         public void TargetValuesPositive()
         {
             Assert.All(accountAssetsData, a => Assert.True(a.Target >= 0));
         }
 
+        // NOTE: The test does not test Output itself.
         [Fact]
         public void TargetLessThan100()
         {
             Assert.All(accountAssetsData, a => Assert.True(a.Target <= 100));
         }
 
+        // NOTE: The test does not test Output itself.
         [Fact]
         public void CurrentValuesPositive()
         {
             Assert.All(accountAssetsData, a => Assert.True(a.Current >= 0));
         }
 
+        // NOTE: The test does not test Output itself.
         [Fact]
         public void CurrentLessThan100()
         {
             Assert.All(accountAssetsData, a => Assert.True(a.Current <= 100));
         }
 
+        // NOTE: The test does not test Output itself.
         [Fact]
         public void VarianceInRange()
         {
             Assert.All(accountAssetsData, a => Assert.True(a.Variance >= -100 && a.Variance <= 100));
         }
 
+        // NOTE: The test does not test Output itself.
         [Fact]
         public void UnitePricePositive()
         {
             Assert.All(accountAssets, a => Assert.True(a.UnitPrice > 0));
         }
 
+        // NOTE: The test does not test Output itself.
         [Fact]
         public void UniqueSecurity()
         {
@@ -151,5 +176,8 @@ namespace Tests
                 }
             }
         }
+
+        #endregion
+
     }
 }

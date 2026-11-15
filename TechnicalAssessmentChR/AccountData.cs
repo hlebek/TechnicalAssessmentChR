@@ -27,9 +27,14 @@ namespace TechnicalAssessmentChR
 
         #endregion
 
+        #region Methods
+
         public void SetTotalAssetsValue(float newTotalAssetsValue)
         {
             this.TotalAssetsValue = newTotalAssetsValue;
         }
+
+        #endregion
+
     }
 }

@@ -24,9 +24,14 @@ namespace TechnicalAssessmentChR
 
         #endregion
 
+        #region Methods
+
         public void UpdateUnitPrice(float newUnitPrice)
         {
             this.UnitPrice = newUnitPrice;
         }
+
+        #endregion
+
     }
 }
