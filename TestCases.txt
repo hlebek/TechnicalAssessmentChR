@@ -10,5 +10,5 @@ Things to test:
 7. Each Unit Price cell is positive
 8. Each Security has unique name
 9. Output should be negative for negative Target Variance and positive for positive Target Variance
-10. Output times unit price divided by total asses should be equal Target Variance
+10. Output times unit price divided by total assests should be equal Target Variance
 11. Output and Variance have the same symbol
