@@ -1,0 +1,11 @@
+Things to test:
+1. Target% sum is equal to 100
+2. Current% sum is equal to 100
+3. Target Variance sum is equal to 0
+4. Each Target% cell is not negative and less than 100
+5. Each Current% is not negative and less than 100
+6. Each Target Variance cell is in range of <-100;100>
+7. Each Unit Price cell is positive
+8. Each Security has unique name
+9. Output should be negative for negative Target Variance and positive for positive Target Variance
+10. Output times unit price divided by total asses should be equal Target Variance
