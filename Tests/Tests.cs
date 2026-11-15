@@ -177,6 +177,16 @@ namespace Tests
             }
         }
 
+        [Fact]
+        public void OutputIsNotNull()
+        {
+            foreach (var asset in accountData.Assets)
+            {
+                float output = asset.Value.GetOutput(accountData.TotalAssetsValue, asset.Key);
+                Assert.NotNull(output);
+            }
+        }
+
         #endregion
 
     }
