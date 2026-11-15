@@ -114,7 +114,7 @@ namespace Tests
         }
 
         [Fact]
-        public void TestOutputValue()
+        public void TestOutputValues()
         {
             foreach (var asset in accountData.Assets)
             {
@@ -122,6 +122,33 @@ namespace Tests
                 float actualOutput = asset.Value.GetOutput(accountData.TotalAssetsValue, asset.Key);
                 ConsoleOutput.WriteLine($"For {asset.Key.AssetSecurity} Expected: {expectedOutput}, Actual: {actualOutput}");
                 Assert.Equal(expectedOutput, actualOutput);
+            }
+        }
+
+        /// <summary>
+        /// This is to check whether Output matches defined values from the list that were calculated manually.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the count of expected values does not match the number of assets.
+        /// </exception>
+        [Fact]
+        public void TestOutputValuesWithList()
+        {
+            List<float> expectedValues = new List<float> { -66.667f, 0.0f, 45.4545f, 0.0f, 0.0f };
+
+            for (int i = 0; i < expectedValues.Count; i++)
+            {
+                if (expectedValues.Count != accountAssets.Count)
+                {
+                    throw new InvalidOperationException("Expected values count does not match the number of assets.");
+                }
+                else
+                {
+                    float expectedOutput = expectedValues[i];
+                    float actualOutput = accountAssetsData[i].GetOutput(accountData.TotalAssetsValue, accountAssets[i]);
+                    ConsoleOutput.WriteLine($"For {accountAssets[i].AssetSecurity} Expected: {expectedOutput}, Actual: {actualOutput}");
+                    Assert.Equal(expectedOutput, actualOutput, 0.001f);
+                }
             }
         }
     }
