@@ -6,8 +6,20 @@ namespace TechnicalAssessmentChR
 {
     public static class ExampleApp
     {
+
+        #region Properties
+
+        public readonly static List<string> MenuOptions = new List<string> {
+            "1. Print Account Data",
+            "2. Update Asset Unit Price",
+            "3. Update Total Assets Value",
+            "4. Exit" };
+
         private static string accountName = "ABC";
         private static float totalAssetsValue = 100000f;
+
+        private static int selectedOption = 0;
+        private static int maxSelectedOption = MenuOptions.Count - 1;
         private static Dictionary<Asset, DataForAsset> assets = new Dictionary<Asset, DataForAsset> {
             { new Asset("IBM", 150f), new DataForAsset(20f, 10f) },
             { new Asset("MSFT", 90f), new DataForAsset(20f, 20f) },
@@ -15,17 +27,13 @@ namespace TechnicalAssessmentChR
             { new Asset("AAPL", 450f), new DataForAsset(20f, 20f) },
             { new Asset("HD", 70f), new DataForAsset(20f, 20f) },
         };
-
         private static AccountData account = new AccountData(accountName, totalAssetsValue, assets);
-        public readonly static List<string> MenuOptions = new List<string> {
-            "1. Print Account Data",
-            "2. Update Asset Unit Price",
-            "3. Update Total Assets Value",
-            "4. Exit" };
 
-        private static int selectedOption = 0;
-        private static int maxSelectedOption = MenuOptions.Count - 1;
         private static List<Action> currActions = new List<Action>();
+
+        #endregion
+
+        #region Public Methods
 
         public static void PrintMenu()
         {
@@ -53,14 +61,6 @@ namespace TechnicalAssessmentChR
 
                 Console.WriteLine(MenuOptions[i]);
             }
-        }
-
-        private static void UpdateMenuLine(int Position, string lineValue, ConsoleColor color)
-        {
-            Console.SetCursorPosition(0, Position + 1);
-            Console.BackgroundColor = color;
-            Console.Write(lineValue);
-            Console.BackgroundColor = ConsoleColor.Black;
         }
 
         public static void WaitForInput(List<string> options)
@@ -97,6 +97,18 @@ namespace TechnicalAssessmentChR
             }
         }
 
+        #endregion
+
+        #region Private Methods
+
+        private static void UpdateMenuLine(int Position, string lineValue, ConsoleColor color)
+        {
+            Console.SetCursorPosition(0, Position + 1);
+            Console.BackgroundColor = color;
+            Console.Write(lineValue);
+            Console.BackgroundColor = ConsoleColor.Black;
+        }
+
         private static void SelectOption(List<Action> actions)
         {
             actions[selectedOption]();
@@ -118,21 +130,22 @@ namespace TechnicalAssessmentChR
             }
 
             Console.WriteLine($"\nPress any key to go back");
-
             Console.ReadKey();
             PrintMenu();
         }
 
         private static void UpdateAssetUnitPrice()
         {
-            selectedOption = 0;
-            maxSelectedOption = account.Assets.Count;
+            string goBack = "<= Go back";
             List<string> assetNames = new List<string>();
             currActions = new List<Action>();
+            Action helper = null;
+
+            selectedOption = 0;
+            maxSelectedOption = account.Assets.Count;
 
             Console.Clear();
             Console.WriteLine("Select an asset to update its unit price:");
-            Action helper = null;
 
             foreach (var asset in account.Assets)
             {
@@ -142,16 +155,16 @@ namespace TechnicalAssessmentChR
                 }
 
                 string line = $"Current Unit Price for {asset.Key.AssetSecurity,-5}: {asset.Key.UnitPrice,5}";
-                Console.WriteLine(line);
+
                 assetNames.Add(line);
+                Console.WriteLine(line);
                 Console.BackgroundColor = ConsoleColor.Black;
                 helper = () => ChangeUnitPrice(asset.Key);
                 currActions.Add(helper);
             }
 
-            string line2 = "<= Go back";
-            Console.WriteLine(line2);
-            assetNames.Add(line2);
+            Console.WriteLine(goBack);
+            assetNames.Add(goBack);
             currActions.Add(() => PrintMenu());
             Console.SetCursorPosition(0, 0);
 
@@ -165,9 +178,9 @@ namespace TechnicalAssessmentChR
         {
             float newTotalAssetsValue = -1;
             bool isValidInput = false;
+
             Console.Clear();
             Console.WriteLine($"Enter new unit price for {asset.AssetSecurity}: ");
-
 
             while (!isValidInput)
             {
@@ -191,6 +204,7 @@ namespace TechnicalAssessmentChR
         {
             float newTotalAssetsValue = -1;
             bool isValidInput = false;
+
             Console.Clear();
             Console.WriteLine($"Current Total Assets Value: {account.TotalAssetsValue}");
 
@@ -217,5 +231,8 @@ namespace TechnicalAssessmentChR
             account.SetTotalAssetsValue(newTotalAssetsValue);
             PrintMenu();
         }
+
+        #endregion
+
     }
 }
