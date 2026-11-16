@@ -104,13 +104,23 @@ namespace TechnicalAssessmentChR
 
         private static void PrintAccountData()
         {
-            Console.WriteLine($"Account Name: {account.AccountName, 7}");
+            int accountAssetLength = account.TotalAssetsValue.ToString().Length;
+
+            Console.Clear();
+            Console.WriteLine($"Account Name: {account.AccountName.PadRight(accountAssetLength)}");
+            Console.WriteLine($"Total Account Assets: {account.TotalAssetsValue.ToString().PadRight(accountAssetLength)}");
+            Console.WriteLine($"\n| Asset Security | Unit Price | Variance |   Output   |");
 
             foreach (var asset in account.Assets)
             {
                 float output = asset.Value.GetOutput(account.TotalAssetsValue, asset.Key);
-                Console.WriteLine($"Asset: {asset.Key.AssetSecurity}, Unit Price: {asset.Key.UnitPrice}, Variance: {asset.Value.Variance}, Output: {output}");
+                Console.WriteLine($"| {asset.Key.AssetSecurity, -14} | {asset.Key.UnitPrice, 10} | {asset.Value.Variance, 8} | {output, 10:F3} |");
             }
+
+            Console.WriteLine($"\nPress any key to go back");
+
+            Console.ReadKey();
+            PrintMenu();
         }
 
         private static void UpdateAssetUnitPrice()
