@@ -25,11 +25,18 @@ namespace TechnicalAssessmentChR
 
         private static int selectedOption = 0;
         private static int maxSelectedOption = MenuOptions.Count - 1;
+        private static List<Action> currActions = new List<Action>();
 
         public static void PrintMenu()
         {
             selectedOption = 0;
             maxSelectedOption = MenuOptions.Count - 1;
+            currActions = new List<Action> {
+                PrintAccountData,
+                UpdateAssetUnitPrice,
+                UpdateTotalAssetsValue,
+                () => Environment.Exit(0) };
+
             Console.Clear();
             Console.WriteLine("Menu:");
 
@@ -82,7 +89,7 @@ namespace TechnicalAssessmentChR
                     break;
 
                 case ConsoleKey.Enter:
-                    SelectOption();
+                    SelectOption(currActions);
                     return;
 
                 default:
@@ -90,42 +97,32 @@ namespace TechnicalAssessmentChR
             }
         }
 
-        private static void SelectOption()
+        private static void SelectOption(List<Action> actions)
         {
-            switch(selectedOption)
-            {
-                case 0:
-                    PrintAccountData();
-                    break;
-                case 1:
-                    UpdateAssetUnitPrice();
-                    break;
-                case 2:
-                    UpdateTotalAssetsValue();
-                    break;
-                case 3:
-                    Environment.Exit(0);
-                    break;
-                default:
-                    break;
-            }
+            actions[selectedOption]();
         }
 
         private static void PrintAccountData()
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"Account Name: {account.AccountName, 7}");
+
+            foreach (var asset in account.Assets)
+            {
+                float output = asset.Value.GetOutput(account.TotalAssetsValue, asset.Key);
+                Console.WriteLine($"Asset: {asset.Key.AssetSecurity}, Unit Price: {asset.Key.UnitPrice}, Variance: {asset.Value.Variance}, Output: {output}");
+            }
         }
 
         private static void UpdateAssetUnitPrice()
         {
-            float newUnitPrice = -1;
-            bool isValidInput = false;
             selectedOption = 0;
-            maxSelectedOption = account.Assets.Count - 1;
+            maxSelectedOption = account.Assets.Count;
             List<string> assetNames = new List<string>();
+            currActions = new List<Action>();
 
             Console.Clear();
             Console.WriteLine("Select an asset to update its unit price:");
+            Action helper = null;
 
             foreach (var asset in account.Assets)
             {
@@ -138,11 +135,46 @@ namespace TechnicalAssessmentChR
                 Console.WriteLine(line);
                 assetNames.Add(line);
                 Console.BackgroundColor = ConsoleColor.Black;
+                helper = () => ChangeUnitPrice(asset.Key);
+                currActions.Add(helper);
             }
 
+            string line2 = "<= Go back";
+            Console.WriteLine(line2);
+            assetNames.Add(line2);
+            currActions.Add(() => PrintMenu());
             Console.SetCursorPosition(0, 0);
-            while(true)
-            WaitForInput(assetNames);
+
+            while(currActions.Contains(helper))
+            {
+                WaitForInput(assetNames);
+            }
+        }
+
+        private static void ChangeUnitPrice(Asset asset)
+        {
+            float newTotalAssetsValue = -1;
+            bool isValidInput = false;
+            Console.Clear();
+            Console.WriteLine($"Enter new unit price for {asset.AssetSecurity}: ");
+
+
+            while (!isValidInput)
+            {
+                string input = Console.ReadLine();
+
+                if (float.TryParse(input, out newTotalAssetsValue) && newTotalAssetsValue >= 0)
+                {
+                    isValidInput = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid non-negative number.");
+                }
+            }
+
+            asset.UpdateUnitPrice(newTotalAssetsValue);
+            PrintMenu();
         }
 
         private static void UpdateTotalAssetsValue()
@@ -154,10 +186,15 @@ namespace TechnicalAssessmentChR
 
             while (!isValidInput)
             {
-                Console.Write("Enter new total assets value: ");
+                Console.Write("Enter new total assets value (empty to cancel): ");
                 string input = Console.ReadLine();
 
-                if (float.TryParse(input, out newTotalAssetsValue) && newTotalAssetsValue >= 0)
+                if (string.IsNullOrEmpty(input))
+                {
+                    PrintMenu();
+                    return;
+                }
+                else if (float.TryParse(input, out newTotalAssetsValue) && newTotalAssetsValue >= 0)
                 {
                     isValidInput = true;
                 }
