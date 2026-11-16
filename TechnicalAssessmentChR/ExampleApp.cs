@@ -17,16 +17,20 @@ namespace TechnicalAssessmentChR
         };
 
         private static AccountData account = new AccountData(accountName, totalAssetsValue, assets);
-        private static List<string> MenuOptions = new List<string> {
+        public readonly static List<string> MenuOptions = new List<string> {
             "1. Print Account Data",
             "2. Update Asset Unit Price",
             "3. Update Total Assets Value",
             "4. Exit" };
 
         private static int selectedOption = 0;
+        private static int maxSelectedOption = MenuOptions.Count - 1;
 
         public static void PrintMenu()
         {
+            selectedOption = 0;
+            maxSelectedOption = MenuOptions.Count - 1;
+            Console.Clear();
             Console.WriteLine("Menu:");
 
             for (int i = 0; i < MenuOptions.Count; i++)
@@ -44,35 +48,36 @@ namespace TechnicalAssessmentChR
             }
         }
 
-        public static void UpdateMenu(int oldPosition, int newPosition)
+        private static void UpdateMenuLine(int Position, string lineValue, ConsoleColor color)
         {
-            Console.SetCursorPosition(0, oldPosition + 1);
+            Console.SetCursorPosition(0, Position + 1);
+            Console.BackgroundColor = color;
+            Console.Write(lineValue);
             Console.BackgroundColor = ConsoleColor.Black;
-            Console.Write(MenuOptions[oldPosition]);
-
-            Console.SetCursorPosition(0, newPosition + 1);
-            Console.BackgroundColor = ConsoleColor.DarkGray;
-            Console.Write(MenuOptions[newPosition]);
         }
 
-        public static void WaitForInput()
+        public static void WaitForInput(List<string> options)
         {
-            int oldPosition = selectedOption;
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            maxSelectedOption = options.Count - 1;
 
             switch (keyInfo.Key)
             {
                 case ConsoleKey.UpArrow:
                     if (selectedOption > 0)
                     {
+                        UpdateMenuLine(selectedOption, options[selectedOption], ConsoleColor.Black);
                         selectedOption--;
+                        UpdateMenuLine(selectedOption, options[selectedOption], ConsoleColor.DarkGray);
                     }
                     break;
 
                 case ConsoleKey.DownArrow:
-                    if (selectedOption < (MenuOptions.Count - 1))
+                    if (selectedOption < maxSelectedOption)
                     {
+                        UpdateMenuLine(selectedOption, options[selectedOption], ConsoleColor.Black);
                         selectedOption++;
+                        UpdateMenuLine(selectedOption, options[selectedOption], ConsoleColor.DarkGray);
                     }
                     break;
 
@@ -83,8 +88,6 @@ namespace TechnicalAssessmentChR
                 default:
                     break;
             }
-
-            UpdateMenu(oldPosition, selectedOption);
         }
 
         private static void SelectOption()
@@ -106,6 +109,66 @@ namespace TechnicalAssessmentChR
                 default:
                     break;
             }
+        }
+
+        private static void PrintAccountData()
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void UpdateAssetUnitPrice()
+        {
+            float newUnitPrice = -1;
+            bool isValidInput = false;
+            selectedOption = 0;
+            maxSelectedOption = account.Assets.Count - 1;
+            List<string> assetNames = new List<string>();
+
+            Console.Clear();
+            Console.WriteLine("Select an asset to update its unit price:");
+
+            foreach (var asset in account.Assets)
+            {
+                if (assetNames.Count == 0)
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkGray;
+                }
+
+                string line = $"Current Unit Price for {asset.Key.AssetSecurity,-5}: {asset.Key.UnitPrice,5}";
+                Console.WriteLine(line);
+                assetNames.Add(line);
+                Console.BackgroundColor = ConsoleColor.Black;
+            }
+
+            Console.SetCursorPosition(0, 0);
+            while(true)
+            WaitForInput(assetNames);
+        }
+
+        private static void UpdateTotalAssetsValue()
+        {
+            float newTotalAssetsValue = -1;
+            bool isValidInput = false;
+            Console.Clear();
+            Console.WriteLine($"Current Total Assets Value: {account.TotalAssetsValue}");
+
+            while (!isValidInput)
+            {
+                Console.Write("Enter new total assets value: ");
+                string input = Console.ReadLine();
+
+                if (float.TryParse(input, out newTotalAssetsValue) && newTotalAssetsValue >= 0)
+                {
+                    isValidInput = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid non-negative number.");
+                }
+            }
+
+            account.SetTotalAssetsValue(newTotalAssetsValue);
+            PrintMenu();
         }
     }
 }

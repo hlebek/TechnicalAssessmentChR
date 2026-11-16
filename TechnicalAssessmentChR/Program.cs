@@ -8,7 +8,7 @@ internal class Program
 
         while (true)
         {
-            ExampleApp.WaitForInput();
+            ExampleApp.WaitForInput(ExampleApp.MenuOptions);
         }
     }
 }
