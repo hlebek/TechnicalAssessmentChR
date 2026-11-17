@@ -13,7 +13,7 @@ namespace Tests
         private string accountName = "ABC";
         private float totalAssetsValue = 100000f;
         private Dictionary<Asset, DataForAsset> assetsToTest = new Dictionary<Asset, DataForAsset> {
-            { new Asset("IBM", 155f), new DataForAsset(20f, 10f) },
+            { new Asset("IBM", 150f), new DataForAsset(20f, 10f) },
             { new Asset("MSFT", 90f), new DataForAsset(20f, 20f) },
             { new Asset("ORCL", 220f), new DataForAsset(20f, 30f) },
             { new Asset("AAPL", 450f), new DataForAsset(20f, 20f) },

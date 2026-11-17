@@ -159,7 +159,7 @@ namespace Tests
         [Fact]
         public void TestOutputValuesWithList()
         {
-            List<float> expectedValues = new List<float> { -75.188f, 0.0f, 45.4545f, 0.0f, 0.0f };
+            List<float> expectedValues = new List<float> { -66.667f, 0.0f, 45.4545f, 0.0f, 0.0f };
 
             for (int i = 0; i < expectedValues.Count; i++)
             {
